@@ -6,7 +6,7 @@
 /*   By: lyanga <lyanga@student.42singapore.sg>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 21:04:26 by lyanga            #+#    #+#             */
-/*   Updated: 2025/06/05 00:36:17 by lyanga           ###   ########.fr       */
+/*   Updated: 2025/06/05 19:33:34 by lyanga           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,9 @@
 int main(void)
 {
 	char* line;
-	line = get_next_line(STDIN_FILENO);
+	int fd = open("test.txt", O_RDONLY);
+	printf("fd: %d\n", fd);
+	line = get_next_line(fd);
 	printf("----- becomes\n%s", line);
 	free(line);
 	return 0;

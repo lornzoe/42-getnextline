@@ -6,107 +6,59 @@
 /*   By: lyanga <lyanga@student.42singapore.sg>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 20:57:02 by lyanga            #+#    #+#             */
-/*   Updated: 2025/06/05 10:06:31 by lyanga           ###   ########.fr       */
+/*   Updated: 2025/06/05 20:54:19 by lyanga           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdio.h>
+#include <limits.h>
 
-void	*ft_calloc(size_t nmemb, size_t size)
+char	*check_buffer(char *buffer)
 {
-	unsigned char	*temp;
-	size_t			i;
-	size_t			totalsize;
-	size_t			limit;
+	char *nextline;
+	char *nextstart;
 
-	limit = -1;
-	if (!nmemb || !size)
-		return (malloc(0));
-	if (limit / nmemb < size)
+	nextstart = ft_strchr(buffer, '\n');
+	if (!nextstart)
 		return (NULL);
-	totalsize = nmemb * size;
-	temp = malloc(totalsize);
-	if (!temp)
-		return (NULL);
-	i = 0;
-	while (i < totalsize)
-		temp[i++] = 0;
-	return (temp);
+	nextstart += 1;
+	nextline = ft_substr(buffer, 0, nextstart - buffer);
+	// memmove up the rest of the str from nextstart
+	// fill the moved space with null terms
+	return nextline;
 }
-
-char	*reallocate_space(char *buffer, size_t currlimit, size_t newlimit)
-{
-	char	*newbuffer;
-	size_t	itr;
-
-	if (!buffer )
-		return NULL;
-	newbuffer = ft_calloc(newlimit, sizeof(char));
-	if (!newbuffer)
-		return NULL;
-	itr = 0;
-	while (itr < currlimit)
-		newbuffer[itr] = buffer[itr++];
-	free(buffer);
-	return newbuffer;
-}
-char	*add_to_dest(char *src, char *dest, size_t size, size_t start)
-{
-	static size_t	total;
-	size_t			limit;
-	size_t			newlimit;
-
-	limit = (total / BUFFER_SIZE + 1) * BUFFER_SIZE;
-	if ((start + size) > limit) // make room for null term
-	{
-		newlimit = limit;
-		while (newlimit < start + size)
-			newlimit += BUFFER_SIZE;
-		dest = reallocate_space(dest, limit, newlimit);
-	}
-	total += size;
-	while (size)
-	{
-		dest[start + size] = src[size];
-		size--;
-		start++;
-	}
-	dest[start] = '\0';
-	return (dest);
-}
-
 
 char	*get_next_line(int fd)
 {
+	static char	buffer[BUFFER_SIZE + 1];
 	char	*line;
-	char	buffer[BUFFER_SIZE];
 	size_t	totalbytesread;
-	size_t	bytesread;
+	ssize_t	bytesread;
 
-	line = ft_calloc(BUFFER_SIZE, sizeof(char));
+	if (fd < 0 || BUFFER_SIZE <= 0 || BUFFER_SIZE > LONG_MAX)
+		return (NULL);
+	line = NULL;
 	totalbytesread = 0;
 	bytesread = BUFFER_SIZE;
+	printf("bytes read: %zu\n", bytesread);
 	while (bytesread == BUFFER_SIZE)
 	{
-		bytesread = read(fd, line, BUFFER_SIZE);
+		bytesread = read(fd, buffer, BUFFER_SIZE);
+		buffer[bytesread] = '\0';
+		printf("buffer: %s\n", buffer);
+		printf("bytes read: %d\n", bytesread);
+
 		if (bytesread == BUFFER_SIZE) // the whole thing was not captured
-			line = add_to_dest(buffer, line, bytesread, totalbytesread);
+			line = ft_strjoin(line, buffer);
 		totalbytesread += bytesread;
-		if (bytesread > 0 && buffer[bytesread - 1] == '\n')
-		{
-			buffer[bytesread - 1] = '\0';
-			break;
-		}
+		if (bytesread > 0 && bytesread != BUFFER_SIZE)
+			break ;
 	}
-	if (totalbytesread != 0)
-		line = add_to_dest(buffer, line, bytesread, totalbytesread);
-	if (totalbytesread == 0)
-	{
-		printf("something happened \n");
-		free(line);
-		line = NULL;
-	}
+	if (totalbytesread > 0)
+		line = ft_strjoin(line, buffer);
+	printf("ttoal bytes read: %d \n", totalbytesread);
+	printf("resulting line: \n%s--\n", line);
 	return (line);
 
 }
