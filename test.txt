@@ -1,4 +1,6 @@
-He's a goon
-He's a gooooon!
-I was just a goon...
-I was just a gooooooooo-ooon.
+This is line 1. So what happens if there's a decreasing order with string length?
+second line, c'est la.
+this is the third line123456
+Or does the issue happen on the third line onwards only?
+whatisgoingonwithline4
+This is line 5

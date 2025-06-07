@@ -6,7 +6,7 @@
 /*   By: lyanga <lyanga@student.42singapore.sg>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 21:09:28 by lyanga            #+#    #+#             */
-/*   Updated: 2025/06/05 20:24:25 by lyanga           ###   ########.fr       */
+/*   Updated: 2025/06/07 06:19:03 by lyanga           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,28 @@
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+void	*ft_calloc(size_t nmemb, size_t size)
+{
+	unsigned char	*temp;
+	size_t			i;
+	size_t			totalsize;
+	size_t			limit;
+
+	limit = -1;
+	if (!nmemb || !size)
+		return (malloc(0));
+	if (limit / nmemb < size)
+		return (NULL);
+	totalsize = nmemb * size;
+	temp = malloc(totalsize);
+	if (!temp)
+		return (NULL);
+	i = 0;
+	while (i < totalsize)
+		temp[i++] = 0;
+	return (temp);
+}
 
 char	*ft_strjoin(char const *s1, char const *s2)
 {
@@ -124,6 +146,22 @@ char	*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
+size_t	ft_strlcpy(char *dst, const char *src, size_t size)
+{
+	size_t	itr;
+
+	if (size == 0)
+		return (ft_strlen(src));
+	itr = 0;
+	while (itr < (size - 1) && src[itr] != '\0')
+	{
+		dst[itr] = src[itr];
+		itr++;
+	}
+	dst[itr] = '\0';
+	return (ft_strlen(src));
+}
+
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
 	char	*dest;
@@ -145,20 +183,4 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	src += start;
 	ft_strlcpy(dest, src, l + 1);
 	return (dest);
-}
-
-size_t	ft_strlcpy(char *dst, const char *src, size_t size)
-{
-	size_t	itr;
-
-	if (size == 0)
-		return (ft_strlen(src));
-	itr = 0;
-	while (itr < (size - 1) && src[itr] != '\0')
-	{
-		dst[itr] = src[itr];
-		itr++;
-	}
-	dst[itr] = '\0';
-	return (ft_strlen(src));
 }
