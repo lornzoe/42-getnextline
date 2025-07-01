@@ -6,7 +6,7 @@
 /*   By: lyanga <lyanga@student.42singapore.sg>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 20:57:02 by lyanga            #+#    #+#             */
-/*   Updated: 2025/07/01 15:29:41 by lyanga           ###   ########.fr       */
+/*   Updated: 2025/07/01 17:43:18 by lyanga           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,17 @@ char	*check_buffer(char *buffer)
 	return nextline;
 }
 
-char 
+int	get_initial_line(char **line, char *buffer)
+{
+	*line = check_buffer(buffer);
+	if (*line)
+		return 1;
+	*line = ft_strdup(buffer);
+	clean_buffer(buffer);
+	return 0;
+}
 
-char	*extend_line(char *line, char *buffer)
+int extend_line(char **line, char *buffer)
 {
 	char	*temp;
 	char	*bufferline;
@@ -56,16 +64,17 @@ char	*extend_line(char *line, char *buffer)
 	bufferline = check_buffer(buffer);
 	if (bufferline) // if the buffer has a endl
 	{
-		temp = line;
-		line = ft_strjoin(line, bufferline);
+		temp = *line;
+		*line = ft_strjoin(*line, bufferline);
 		free(temp);
 		free(bufferline);
-		return (line);
+		return (1);
 	}
-	temp = line;
-	line = ft_strjoin (temp, buffer);
+	temp = *line;
+	*line = ft_strjoin(temp, buffer);
 	free(temp);
 	clean_buffer(buffer);
+	return (0);
 }
 
 char	*get_next_line(int fd)
@@ -76,28 +85,17 @@ char	*get_next_line(int fd)
 	if (fd < 0 || fd >= 1024 || BUFFER_SIZE <= 0)
 		return (NULL);
 	line = NULL;
-	if (ft_strlen(buffer) != 0)
-	{
-		line = check_buffer(buffer);
-		if (line)
-			return line;
-		line = ft_strdup(buffer);
-		clean_buffer(buffer);
-	}
-	while (read(fd, buffer, BUFFER_SIZE))
+	if (ft_strlen(buffer) != 0 && get_initial_line(&line, buffer))
+		return (line);
+	while (read(fd, buffer, BUFFER_SIZE) > 0)
 	{
 		if (!line)
 		{
-			line = check_buffer(buffer);
-			if (line)
-				return line;
-			line = ft_strdup(buffer);
-			clean_buffer(buffer);
-			if (ft_strchr(line, '\n'))
+			if (get_initial_line(&line, buffer) || ft_strchr(line, '\n'))
 				return line;
 		}
-		else // line already exists 
-			line = extend_line(line, buffer);
+		else if (extend_line(&line, buffer))
+			return line;
 	}
 	return line;
 }
