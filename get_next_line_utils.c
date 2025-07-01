@@ -6,7 +6,7 @@
 /*   By: lyanga <lyanga@student.42singapore.sg>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 21:09:28 by lyanga            #+#    #+#             */
-/*   Updated: 2025/06/07 06:19:03 by lyanga           ###   ########.fr       */
+/*   Updated: 2025/06/08 03:09:05 by lyanga           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,18 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	return (temp);
 }
 
+size_t	ft_strlen(const char *s)
+{
+	size_t	i;
+
+	if (*s == '\0')
+		return (0);
+	i = 0;
+	while (s[i] != 0)
+		i++;
+	return (i);
+}
+
 char	*ft_strjoin(char const *s1, char const *s2)
 {
 	char	*result;
@@ -70,35 +82,14 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	return (result);
 }
 
-size_t	ft_strlen(const char *s)
-{
-	size_t	i;
-
-	if (*s == '\0')
-		return (0);
-	i = 0;
-	while (s[i] != 0)
-		i++;
-	return (i);
-}
-
 char	*ft_strdup(const char *s)
 {
 	char	*dest;
 	char	*temp;
-	size_t	totalsize;
-	size_t	i;
 
-	totalsize = (ft_strlen(s) + 1)* sizeof(char);
-	dest = malloc(totalsize);
+	dest = ft_calloc(ft_strlen(s) + 1, sizeof(char));
 	if (!dest)
 		return (NULL);
-	i = 0;
-	while (i < totalsize)
-	{
-		temp[i] = 0;
-		i++;
-	}
 	temp = dest;
 	while (*s)
 	{

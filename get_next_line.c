@@ -6,14 +6,13 @@
 /*   By: lyanga <lyanga@student.42singapore.sg>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 20:57:02 by lyanga            #+#    #+#             */
-/*   Updated: 2025/06/08 01:42:12 by lyanga           ###   ########.fr       */
+/*   Updated: 2025/06/08 04:07:05 by lyanga           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdio.h>
 #include <limits.h>
-#include "libft/libft.h"
 
 char	*clean_buffer(char *buffer)
 {
@@ -49,14 +48,14 @@ char	*check_buffer(char *buffer)
 char	*get_next_line(int fd)
 {
 	static char	buffer[BUFFER_SIZE + 1];
+	char	*temp;
 	char	*bufferline;
 	char	*line;
-	size_t	totalbytesread;
-	ssize_t	bytesread;
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || BUFFER_SIZE > LONG_MAX)
 		return (NULL);
-
+		
+	line = NULL;
 	if (ft_strlen(buffer) != 0)
 	{
 		line = check_buffer(buffer);
@@ -81,10 +80,18 @@ char	*get_next_line(int fd)
 		{
 			bufferline = check_buffer(buffer);
 			if (bufferline) // if the buffer has a endl
-				return ft_strjoin(line, bufferline);
-			line = ft_strjoin (line, buffer);
+			{
+				temp = line;
+				line = ft_strjoin(line, bufferline);
+				free(temp);
+				free(bufferline);
+				return (line);
+			}
+			temp = line;
+			line = ft_strjoin (temp, buffer);
+			free(temp);
 			clean_buffer(buffer);
 		}
 	}
-	return NULL;
+	return line;
 }
