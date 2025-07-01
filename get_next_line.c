@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lyanga <lyanga@student.42singapore.sg>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 20:57:02 by lyanga            #+#    #+#             */
-/*   Updated: 2025/07/01 10:37:51 by marvin           ###   ########.fr       */
+/*   Updated: 2025/07/01 11:04:44 by lyanga           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,12 @@ char	*check_buffer(char *buffer)
 	nextline = ft_substr(buffer, 0, nextstart - buffer);
 	int n = ft_strlen(buffer) - ft_strlen(nextline);
 	ft_memmove(buffer, nextstart, n);
-	while (buffer[n] != '\0')
-	{
-		buffer[n] = '\0';
-		n++;
-	}
+	// while (buffer[n] != '\0')
+	// {
+	// 	buffer[n] = '\0';
+	// 	n++;
+	// }
+	nextstart = '\0';
 	return nextline;
 }
 
