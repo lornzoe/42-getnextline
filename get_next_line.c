@@ -6,7 +6,7 @@
 /*   By: lyanga <lyanga@student.42singapore.sg>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 20:57:02 by lyanga            #+#    #+#             */
-/*   Updated: 2025/07/01 14:51:16 by lyanga           ###   ########.fr       */
+/*   Updated: 2025/07/01 15:29:41 by lyanga           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,25 +37,44 @@ char	*check_buffer(char *buffer)
 	nextline = ft_substr(buffer, 0, nextstart - buffer);
 	int n = ft_strlen(buffer) - ft_strlen(nextline);
 	ft_memmove(buffer, nextstart, n);
-	// while (buffer[n] != '\0')
-	// {
-	// 	buffer[n] = '\0';
-	// 	n++;
-	// }
-	nextstart = '\0';
+	while (buffer[n] != '\0')
+	{
+		buffer[n] = '\0';
+		n++;
+	}
+	*nextstart = '\0';
 	return nextline;
+}
+
+char 
+
+char	*extend_line(char *line, char *buffer)
+{
+	char	*temp;
+	char	*bufferline;
+
+	bufferline = check_buffer(buffer);
+	if (bufferline) // if the buffer has a endl
+	{
+		temp = line;
+		line = ft_strjoin(line, bufferline);
+		free(temp);
+		free(bufferline);
+		return (line);
+	}
+	temp = line;
+	line = ft_strjoin (temp, buffer);
+	free(temp);
+	clean_buffer(buffer);
 }
 
 char	*get_next_line(int fd)
 {
 	static char	buffer[BUFFER_SIZE + 1];
-	char	*temp;
-	char	*bufferline;
 	char	*line;
 
 	if (fd < 0 || fd >= 1024 || BUFFER_SIZE <= 0)
 		return (NULL);
-		
 	line = NULL;
 	if (ft_strlen(buffer) != 0)
 	{
@@ -78,21 +97,7 @@ char	*get_next_line(int fd)
 				return line;
 		}
 		else // line already exists 
-		{
-			bufferline = check_buffer(buffer);
-			if (bufferline) // if the buffer has a endl
-			{
-				temp = line;
-				line = ft_strjoin(line, bufferline);
-				free(temp);
-				free(bufferline);
-				return (line);
-			}
-			temp = line;
-			line = ft_strjoin (temp, buffer);
-			free(temp);
-			clean_buffer(buffer);
-		}
+			line = extend_line(line, buffer);
 	}
 	return line;
 }
