@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lyanga <lyanga@student.42singapore.sg>     +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 21:02:09 by lyanga            #+#    #+#             */
-/*   Updated: 2025/06/08 03:07:40 by lyanga           ###   ########.fr       */
+/*   Updated: 2025/07/01 10:57:51 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # include <stdlib.h>
 // default BUFFER_SIZE val if it's not defined at compile
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 64
+#  define BUFFER_SIZE 1
 # endif
 
 char	*ft_strjoin(char const *s1, char const *s2);
