@@ -6,7 +6,7 @@
 /*   By: lyanga <lyanga@student.42singapore.sg>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 21:02:09 by lyanga            #+#    #+#             */
-/*   Updated: 2025/07/01 15:14:52 by lyanga           ###   ########.fr       */
+/*   Updated: 2025/07/02 13:42:56 by lyanga           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # include <stdlib.h>
 // default BUFFER_SIZE val if it's not defined at compile
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 1
+#  define BUFFER_SIZE 42
 # endif
 
 size_t	ft_strlen(const char *s);
