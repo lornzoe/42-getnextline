@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lyanga <lyanga@student.42singapore.sg>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 20:57:02 by lyanga            #+#    #+#             */
-/*   Updated: 2025/07/07 09:44:02 by lyanga           ###   ########.fr       */
+/*   Updated: 2025/07/07 10:04:08 by lyanga           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 static char	*check_buffer(char *buffer)
 {
@@ -77,22 +77,22 @@ static int	read_constrain_buffer(int fd, char *buffer)
 
 char	*get_next_line(int fd)
 {
-	static char	buffer[BUFFER_SIZE + 1];
+	static char	buffer[FD_LIMIT][BUFFER_SIZE + 1];
 	char		*line;
 
-	if (fd < 0 || fd >= 1024 || BUFFER_SIZE <= 0)
+	if (fd < 0 || fd >= FD_LIMIT || BUFFER_SIZE <= 0)
 		return (NULL);
 	line = NULL;
-	if (ft_strlen(buffer) != 0 && get_initial_line(&line, buffer))
+	if (ft_strlen(buffer[fd]) != 0 && get_initial_line(&line, buffer[fd]))
 		return (line);
-	while (read_constrain_buffer(fd, buffer) > 0)
+	while (read_constrain_buffer(fd, buffer[fd]) > 0)
 	{
 		if (!line)
 		{
-			if (get_initial_line(&line, buffer))
+			if (get_initial_line(&line, buffer[fd]))
 				return (line);
 		}
-		else if (extend_line(&line, buffer))
+		else if (extend_line(&line, buffer[fd]))
 			return (line);
 	}
 	return (line);
