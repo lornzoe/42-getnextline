@@ -6,7 +6,7 @@
 /*   By: lyanga <lyanga@student.42singapore.sg>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 21:09:28 by lyanga            #+#    #+#             */
-/*   Updated: 2025/07/07 10:03:55 by lyanga           ###   ########.fr       */
+/*   Updated: 2025/07/08 13:21:38 by lyanga           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ size_t	ft_strlen(const char *s)
 {
 	size_t	i;
 
+	if (s == NULL)
+		return (0);
 	if (*s == '\0')
 		return (0);
 	i = 0;
@@ -32,7 +34,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	size_t	len;
 
 	if (!s1)
-		return ft_strdup(s2);
+		return (ft_strdup(s2));
 	len = ft_strlen(s1) + ft_strlen(s2);
 	result = malloc(sizeof(char) * (len + 1));
 	if (!result)
@@ -52,7 +54,6 @@ char	*ft_strdup(const char *s)
 {
 	char	*dest;
 	char	*temp;
-	
 
 	dest = malloc(ft_strlen(s) + 1);
 	if (!dest)
