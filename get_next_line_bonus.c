@@ -6,7 +6,7 @@
 /*   By: lyanga <lyanga@student.42singapore.sg>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 20:57:02 by lyanga            #+#    #+#             */
-/*   Updated: 2025/07/08 13:20:16 by lyanga           ###   ########.fr       */
+/*   Updated: 2025/07/08 13:25:09 by lyanga           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ char	*get_next_line(int fd)
 
 	if (fd < 0 || fd >= FD_LIMIT || BUFFER_SIZE <= 0)
 		return (NULL);
+	line = NULL;
 	if (ft_strlen(buffer[fd]) != 0 && get_initial_line(&line, buffer[fd]))
 		return (line);
 	while (read_constrain_buffer(fd, &buffer[fd], &readval) > 0)
