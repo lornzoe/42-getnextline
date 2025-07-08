@@ -6,7 +6,7 @@
 /*   By: lyanga <lyanga@student.42singapore.sg>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 20:57:02 by lyanga            #+#    #+#             */
-/*   Updated: 2025/07/07 10:04:08 by lyanga           ###   ########.fr       */
+/*   Updated: 2025/07/08 00:24:28 by lyanga           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,35 +65,47 @@ static int	extend_line(char **line, char *buffer)
 	return (0);
 }
 
-static int	read_constrain_buffer(int fd, char *buffer)
+static int	read_constrain_buffer(int fd, char *buffer, int *rval)
 {
 	int	readval;
 
 	readval = read(fd, buffer, BUFFER_SIZE);
 	if (readval >= 0)
 		buffer[readval] = '\0';
+	*rval = readval;
 	return (readval);
 }
 
 char	*get_next_line(int fd)
 {
-	static char	buffer[FD_LIMIT][BUFFER_SIZE + 1];
+	static char	*buffer[FD_LIMIT];
 	char		*line;
+	int			readval;
 
 	if (fd < 0 || fd >= FD_LIMIT || BUFFER_SIZE <= 0)
 		return (NULL);
+	if (!buffer[fd])
+	{
+		buffer[fd] = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+		if (!buffer[fd])
+			return (NULL);
+		buffer[fd][0] = '\0';
+	}
+		
 	line = NULL;
 	if (ft_strlen(buffer[fd]) != 0 && get_initial_line(&line, buffer[fd]))
 		return (line);
-	while (read_constrain_buffer(fd, buffer[fd]) > 0)
+	while (read_constrain_buffer(fd, buffer[fd], &readval) > 0)
 	{
 		if (!line)
 		{
 			if (get_initial_line(&line, buffer[fd]))
-				return (line);
+				break ;
 		}
 		else if (extend_line(&line, buffer[fd]))
-			return (line);
+			break ;
 	}
+	if (readval == 0 || readval == -1)
+		free(buffer[fd]);
 	return (line);
 }
